@@ -5,3 +5,4 @@
 To jest modyfikacja wykonana przez Julię Wasiak.
 
 :) zapisane do projektu
+ostatnie grafiki i zmiany

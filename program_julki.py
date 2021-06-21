@@ -22,14 +22,14 @@ class Game:
         self.game_time = None
 
         # grafiki na rozpoczęcie i zakończenie gry
-        self.intro_canvas = Actor("intro-canvas.png")
+        self.intro_canvas = Actor("intro1.png")
         self.intro_canvas.pos = (640, -160)
-        self.game_over_canvas = Actor("intro-gameover-canvas.png")
+        self.game_over_canvas = Actor("finish.png")
         self.game_over_canvas.pos = (320, -160)
 
         # elementy związane z naszym bohaterem
         self.floor_level = 460
-        self.hero = Actor("character-right-01.png")
+        self.hero = Actor("manright1.png")
         self.hero.pos = (WIDTH / 2, self.floor_level)
         # wyznaczenie rozmiarów gracza
         self.hero.height = 256
@@ -41,13 +41,13 @@ class Game:
         self.rooms = rooms_in_game
 
         # klucze
-        self.pocket = Actor("pocket.png")
-        self.pocket.pos = (1000, 100)
+        self.pocket = Actor("pocket1.png")
+        self.pocket.pos = (960, 95)
         self.keys_in_pocket = [key_00, key_01, key_02, key_03, key_04]
 
         #muzyka
         music.play("music-background.mp3")
-        music.set_volume(0.3)
+        music.set_volume(0.1)
         self.music_play = True
 
 
@@ -67,21 +67,21 @@ class Game:
         self.intro_canvas.draw()
         animate(self.intro_canvas, pos=(640, 320), duration=0.3, tween="linear")
 
-        draw_text("Maks - powrót do szkoły", -450, -200, fontsize=32)
+        draw_text("A game where you're lost", -450, -200, fontsize=32)
 
         # wprowadzenie: przedstawienie historii gry, zadania do wykonania, oraz klawisze aktywne w grze.
         story = (
-            "Co powiecie na stworzenie gry przygodowej, w której główny "
-            "bohater - Maks, aby dojść do finału, pokonuje "
-            "przeszkody i rozwiązuje zagadki? A co, jeśli dodam, że akcja "
-            "rozgrywa się w szkole, pozornie najnudniejszym miejscu "
-            "na świecie? Może wspólnie uda nam się to miejsce trochę, "
-            "ekhm... rozruszać? Znajdź i zbierz wszystkie klucze aby wejść do "
-            "rozsadzanej basami auli, na koncert najgorętszegobandu Europy! "
+            "It's a game where the main character is lost in an abandoned school. "
+            "To get to the final control room they have to find all the keys. "
+            "As we all suspect the kid does not want to stay lost... "
+            "that's where you step in! "
+            "You need to help them discover a secret door to freedom. "
+            "We both hope you understant your task. "
+            "Good luck! - the Creator"
             "\n\n"
-            "wyjście z gry - klawisz 'Q'"
+            "click 'Q' to quit the game"
             "\n\n"
-            "Naciśnij klawisz SPACJI, aby rozpocząć grę!"
+            "Click SPACE to start! "
         )
 
         screen.draw.text(
@@ -93,19 +93,13 @@ class Game:
             color=(0, 0, 0),
         )
 
-        # opis klawiszy kontrolnych
-        draw_text("przejdź przez drzwi", 200, -55)
-        draw_text("idź w lewo", 120, 175)
-        draw_text("weź klucz", 230, 175)
-        draw_text("idź w prawo", 330, 175)
-
     def draw_finish(self):
         # animujemy pojawienie się pucharu
         self.game_over_canvas.draw()
-        animate(self.game_over_canvas, pos=(320, 320), duration=0.3, tween="linear")
+        animate(self.game_over_canvas, pos=(900, 320), duration=0.3, tween="linear")
         # pokazujemy teksty
         screen.draw.text(
-            "Maks - powrót do szkoły",
+            "You found the room!",
             (self.game_over_canvas.x - 140, self.game_over_canvas.y - 180),
             fontname="ptsansnarrowbold.ttf",
             fontsize=32,
@@ -113,7 +107,7 @@ class Game:
         )
 
         story = (
-            f"Twój czas to: {self.game_time} \n\nNaciśnij klawisz 'Q', aby wyjść z gry!"
+            f"Your time is: {self.game_time} \n\nClick 'Q' to exit!"
         )
         screen.draw.text(
             story,
@@ -136,14 +130,14 @@ class Game:
         temp = 0
         # dla każdego klucza w liście kluczy
         for key in self.keys_in_pocket:
-            pos = (self.pocket.x + key_pos[temp] - 45, self.pocket.y - 10)
+            pos = (self.pocket.x + key_pos[temp] - 45, self.pocket.y - 30)
             temp += 1
             if key.in_pocket:
                 # jeśli mamy klucz - wyświetlamy z pliku graficznego w konkretnej pozycji
                 screen.blit(key.file_name, pos)
             else:
                 # jeśli nie mamy klucza wyświetlamy znak zapytania
-                screen.blit("question-mark.png", pos)
+                screen.blit("question_mark.png", pos)
 
     def hero_move(self, direction):
 
@@ -173,7 +167,7 @@ class Game:
         self.background_active = new_background_image
 
         # ustawiamy odpowiedni obrazek animujący ruch
-        self.hero.image = f"character-{direction}-0{self.hero.frame}.png"
+        self.hero.image = f"man{direction}{self.hero.frame}.png"
         # zwiększając numer obrazka następnym razem załadujemy inny,
         # co będzie pozornie wyglądało jak ruch
         self.hero.frame += 1
@@ -222,7 +216,7 @@ class Game:
             # pomieszczenia jest taki sam jak numer pomieszczenia dla klucza
             if not key.in_pocket and self.actual_room == key.room_number:
                 # wyświetlamy klucz
-                screen.blit(key.file_name, (key.place_on_floor, 475))
+                screen.blit(key.file_name, (key.place_on_floor, 534))
 
     def get_key(self):
         def check_all_keys(keys):
@@ -304,7 +298,7 @@ class Game:
             self.draw_key()
             # rysujemy ukryte drzwi i ustawiamy możliwość przejścia
             if self.all_keys_found and self.actual_room == 8:
-                screen.blit("hidden-door-01.png", (206, 191))
+                screen.blit("thedoor.jpg", (206, 118))
 
             # rysujemy głównego bohatera bazując na jego danych
             self.hero.draw()
@@ -335,8 +329,8 @@ class Door:
 
         self.room_number = room_number
         # każde drzwi mają pewne wymiary (235 pixeli), więc obliczamy lewy i prawy koniec
-        self.x_left_door = door_position - (236 / 2)
-        self.x_right_door = door_position + (236 / 2)
+        self.x_left_door = door_position - (230 / 2)
+        self.x_right_door = door_position + (230 / 2)
         self.next_room_number = next_room_number
         self.open = open
 
@@ -364,44 +358,44 @@ class Room:
 
 
 # podstawowe zmienne
-background_active = "one.jpg"
+background_active = "c1.jpg"
 
 # tworzymy klucze, a jako *self* będą przypisane nazwy zmiennych key_
-key_00 = Key("key-00.png", False, 11, 1025)
-key_01 = Key("key-01.png", False, 17, 80)
-key_02 = Key("key-02.png", False, 16, 850)
-key_03 = Key("key-03.png", False, 4, 950)
-key_04 = Key("key-04.png", False, 0, 370)
+key_00 = Key("key1.png", False, 11, 1050)
+key_01 = Key("key2.png", False, 17, 80)
+key_02 = Key("key3.png", False, 16, 670)
+key_03 = Key("key4.png", False, 4, 950)
+key_04 = Key("key5.png", False, 0, 370)
 
 # tworzymy drzwi zgodnie z planem pomieszczeń
 # domyślnie każde z drzwi będzie otwarte
-door_00 = Door(0, 963, 5, True)
+door_00 = Door(0, 967, 5, True)
 door_01 = Door(3, 962, 8, True)
-door_02 = Door(5, 307, 15, True)
+door_02 = Door(5, 240, 15, True)
 door_03 = Door(5, 967, 0, True)
-door_04 = Door(6, 337, 11, True)
-door_05 = Door(7, 932, 17, True)
-door_06 = Door(8, 767, 3, True)
+door_04 = Door(6, 930, 11, True)
+door_05 = Door(7, 735, 17, True)
+door_06 = Door(8, 1000, 3, True)
 door_07 = Door(8, 327, 13, False)
-door_08 = Door(11, 327, 6, True)
+door_08 = Door(11, 925, 6, True)
 door_09 = Door(13, 327, 8, True)
-door_10 = Door(15, 307, 5, True)
-door_11 = Door(17, 932, 7, True)
+door_10 = Door(15, 240, 5, True)
+door_11 = Door(17, 735, 7, True)
 
 # tworzymy opisy pomieszczeń zgodnie z planem, najpierw tworzymy instancje klasy Room
 room_00 = Room(0, "Przyroda 01", 2, "science1.jpg", [door_00])
 room_01 = Room(1, "Przyroda 02", 1, "science2.jpg")
-room_03 = Room(3, "Sala Gimnastyczna 01", 2, "gym-01.jpg", [door_01])
-room_04 = Room(4, "Sala Gimnastyczna 02", 1, "gym-02.jpg")
-room_05 = Room(5, "Korytarz 01 lewy", 2, "one.jpg", [door_02, door_03])
-room_06 = Room(6, "Korytarz 02", 3, "four.jpg", [door_04])
-room_07 = Room(7, "Korytarz 03", 3, "two.jpg", [door_05])
-room_08 = Room(8, "Korytarz 04 prawy", 1, "three.jpg", [door_06, door_07])
-room_11 = Room(11, "WC", 0, "wc2.jpg", [door_08])
-room_13 = Room(13, "Aula", 0, "assembly-hall.jpg", [door_09])  # Tego nie ma na mapie !
-room_15 = Room(15, "Matematyka 01", 2, "math1.jpg", [door_10])
+room_03 = Room(3, "Sala Gimnastyczna 01", 2, "pe1.jpg", [door_01])
+room_04 = Room(4, "Sala Gimnastyczna 02", 1, "pe2.jpg")
+room_05 = Room(5, "Korytarz 01 lewy", 2, "c1.jpg", [door_02, door_03])
+room_06 = Room(6, "Korytarz 02", 3, "c2.jpg", [door_04])
+room_07 = Room(7, "Korytarz 03", 3, "c3.jpg", [door_05])
+room_08 = Room(8, "Korytarz 04 prawy", 1, "c4.jpg", [door_06, door_07])
+room_11 = Room(11, "WC", 0, "wc1.jpg", [door_08])
+room_13 = Room(13, "Aula", 0, "the_end.jpg", [door_09])  # Tego nie ma na mapie !
+room_15 = Room(15, "Matematyka 01", 2, "math0.jpg", [door_10])
 room_16 = Room(16, "Matematyka 02", 1, "math2.jpg")
-room_17 = Room(17, "Informatyka 01", 2, "inf1.jpg", [door_11])
+room_17 = Room(17, "Informatyka 01", 2, "inf0.jpg", [door_11])
 room_18 = Room(18, "Informatyka 02", 1, "inf2.jpg")
 
 # następnie tworzymy słownik odpowiadający numeracją układowi pomieszczeń na mapie
