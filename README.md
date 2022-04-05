@@ -2,7 +2,7 @@
 
 # Publiczne repozytorium kodu gry do książki.
 
-To jest modyfikacja wykonana przez Julię Wasiak.
+To jest modyfikacja wykonana przez NW.
 
 :) zapisane do projektu
 ostatnie grafiki i zmiany
